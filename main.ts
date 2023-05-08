@@ -58,28 +58,37 @@ const getBet = (balance: number, lines: number): number => {
 
 const spin = (): string[][] => {
 	let symbols: string[] = [];
+	// push all possible sybmols to array
 	for (const [symbol, count] of Object.entries(SYMBOLS_COUNT)) {
 		for (let i = 0; i < count; i++) {
 			symbols.push(symbol);
 		}
 	}
-
+	/**
+	 * Reels is a nested arrow contains 3 symbols each ( total of 9 )
+	 * @example
+	 * [['A','B','A'],['B','C','A'],['C','A','B']]
+	 * */
 	let reels: string[][] = [];
 	for (let i = 0; i < COLS; i++) {
 		reels.push([]);
 		let reelSymbols = [...symbols];
 
 		for (let j = 0; j < ROWS; j++) {
+			// get a random number from 0 - reelSybmols.length
 			const randomIndex = Math.floor(Math.random() * reelSymbols.length);
 			reels[i].push(reelSymbols[randomIndex]);
+			// removes pushed symbol from array
 			reelSymbols.splice(randomIndex, 1);
 		}
 	}
 	return reels;
 };
 
+// transpose array by switching its rows with its columns
 const transpose = (reels: string[][]): string[][] => {
 	let rows: string[][] = [];
+	// gets first item from each elements in the array and store in new array
 	for (let i = 0; i < ROWS; i++) {
 		rows.push([]);
 		for (let j = 0; j < COLS; j++) {
@@ -89,6 +98,7 @@ const transpose = (reels: string[][]): string[][] => {
 	return rows;
 };
 
+// output reels in a fancy way
 const consoleReels = (rows: string[][]): void => {
 	for (const row of rows) {
 		let rowString = "";
@@ -123,6 +133,7 @@ const getWinnings = (lines: number, rows: string[][], bet: number): number => {
 	return winnings;
 };
 
+// game controller
 const game = (): void => {
 	let balance: number = deposit();
 	while (true) {
