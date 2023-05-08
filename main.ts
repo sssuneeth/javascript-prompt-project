@@ -93,15 +93,7 @@ const spin = (): string[][] => {
 
 // transpose array by switching its rows with its columns
 const transpose = (reels: string[][]): string[][] => {
-	let rows: string[][] = [];
-	// gets first item from each elements in the array and store in new array
-	for (let i = 0; i < ROWS; i++) {
-		rows.push([]);
-		for (let j = 0; j < COLS; j++) {
-			rows[i].push(reels[j][i]);
-		}
-	}
-	return rows;
+	return reels[0].map((_, i) => reels.map((row) => row[i]));
 };
 
 // output reels in a fancy way
