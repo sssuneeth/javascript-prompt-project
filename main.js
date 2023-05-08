@@ -81,24 +81,20 @@ const spin = () => {
 };
 
 const transposeReels = (reels) => {
-	const row = [];
+	const rows = [];
 
 	for (let i = 0; i < ROWS; i++) {
-		row.push([]);
+		rows.push([]);
 		for (let j = 0; j < COLS; j++) {
-			row[i].push(reels[j][i]);
+			rows[i].push(reels[j][i]);
 		}
 	}
-	console.log(reels);
-	console.log(row);
+	return rows;
 };
 
 const reels = spin();
-transposeReels(reels);
-// console.log(reels);
+const transposedReels = transposeReels(reels);
 
 // const balance = deposit();
 // const numberOfLines = getNumberOfLines();
 // const bet = getBetAmount(balance, numberOfLines);
-
-// console.log(bet);
