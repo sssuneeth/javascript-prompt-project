@@ -64,20 +64,24 @@ const spin = () => {
 		}
 	}
 
-	const reels = [[], [], []];
+	const reels = [];
 	for (let i = 0; i < COLS; i++) {
+		reels.push([]);
 		const reelSymbols = [...symbols];
-		for (let i = 0; i < ROWS; i++) {
-			const selectedIndex = Math.floor(Math.random() * reelSymbols.length);
+		for (let j = 0; j < ROWS; j++) {
+			const selectedIndex = Math.floor(
+				Math.random() * reelSymbols.length
+			);
 			const selectedSymbol = reelSymbols[selectedIndex];
 			reels[i].push(selectedSymbol);
 			reelSymbols.splice(selectedIndex, 1);
 		}
 	}
-	console.log(reels);
-}
+	return reels;
+};
 
-spin();
+const reels = spin();
+console.log(reels);
 
 // const balance = deposit();
 // const numberOfLines = getNumberOfLines();
