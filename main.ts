@@ -24,8 +24,7 @@ const SYMBOLS_VALUE: SymbolValue = {
 const deposit = (): number => {
 	let deposit: number;
 	do {
-		const depositInp = input("Enter a deposit amount: ");
-		deposit = +depositInp;
+		deposit = parseFloat(input("Enter a deposit amount: "));
 		if (Number.isNaN(deposit) || deposit <= 0) {
 			console.log(
 				"Please enter a valid positive number for your deposit."
@@ -40,8 +39,7 @@ const getNumberOfLines = (): number => {
 	const MAX_LINES = 3;
 
 	while (true) {
-		const linesInp = input( `Enter number of lines you want to bet on (${MIN_LINES}-${MAX_LINES}): `);
-		const lines = +linesInp;
+		const lines = parseFloat(input( `Enter number of lines you want to bet on (${MIN_LINES}-${MAX_LINES}): `));
 		if (Number.isNaN(lines) || lines < MIN_LINES || lines > MAX_LINES) {
 			console.log("Invalid number of lines");
 		} else {
