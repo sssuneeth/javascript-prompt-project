@@ -26,18 +26,25 @@ const deposit = (): number => {
 	do {
 		deposit = parseFloat(input("Enter a deposit amount: "));
 		if (Number.isNaN(deposit) || deposit <= 0) {
-			console.log("Please enter a valid positive number for your deposit.");
+			console.log(
+				"Please enter a valid positive number for your deposit."
+			);
 		}
-	} while (Number.isNaN(deposit) || deposit <= 0)
+	} while (Number.isNaN(deposit) || deposit <= 0);
 	return deposit;
 };
 
 const getNumberOfLines = (): number => {
+	const MIN_LINES = 1;
+	const MAX_LINES = 3;
+
 	while (true) {
 		const lines = parseFloat(
-			input("Enter number of lines you want to bet on (1-3): ")
+			input(
+				`Enter number of lines you want to bet on (${MIN_LINES}-${MAX_LINES}): `
+			)
 		);
-		if (isNaN(lines) || lines <= 0 || lines > 3) {
+		if (Number.isNaN(lines) || lines < MIN_LINES || lines > MAX_LINES) {
 			console.log("Invalid number of lines");
 		} else {
 			return lines;
@@ -48,8 +55,10 @@ const getNumberOfLines = (): number => {
 const getBetAmount = (balance: number, lines: number): number => {
 	while (true) {
 		const bet = parseFloat(input("Enter a bet amount for per line: "));
-		if (isNaN(bet) || bet * lines > balance) {
+		if (Number.isNaN(bet) || bet <= 0) {
 			console.log("Invalid bet amount");
+		} else if (bet * lines > balance) {
+			console.log("Bet amount exceeds your balance");
 		} else {
 			return bet;
 		}
@@ -57,30 +66,27 @@ const getBetAmount = (balance: number, lines: number): number => {
 };
 
 const spin = (): string[][] => {
-	let symbols: string[] = [];
-	// push all possible sybmols to array
-	for (const [symbol, count] of Object.entries(SYMBOLS_COUNT)) {
-		for (let i = 0; i < count; i++) {
-			symbols.push(symbol);
-		}
-	}
+	// gets all possible sybmols to array
+	const symbols: string[] = Object.entries(SYMBOLS_COUNT).flatMap(
+		([symbol, count]) => Array(count).fill(symbol)
+	);
 	/**
 	 * Reels is a nested arrow contains 3 symbols each ( total of 9 )
 	 * @example
 	 * [['A','B','A'],['B','C','A'],['C','A','B']]
 	 * */
-	let reels: string[][] = [];
+	const reels: string[][] = [];
 	for (let i = 0; i < COLS; i++) {
-		reels.push([]);
-		let reelSymbols = [...symbols];
+		const reelSymbols = [...symbols];
+		const reel: string[] = [];
 
 		for (let j = 0; j < ROWS; j++) {
-			// get a random number from 0 - reelSybmols.length
 			const randomIndex = Math.floor(Math.random() * reelSymbols.length);
-			reels[i].push(reelSymbols[randomIndex]);
+			reel.push(reelSymbols[randomIndex]);
 			// removes pushed symbol from array
 			reelSymbols.splice(randomIndex, 1);
 		}
+		reels.push(reel);
 	}
 	return reels;
 };
@@ -100,12 +106,11 @@ const transpose = (reels: string[][]): string[][] => {
 
 // output reels in a fancy way
 const consoleReels = (rows: string[][]): void => {
-  for (const row of rows) {
-    const rowString = row.join(" | ");
-    console.log(rowString);
-  }
+	for (const row of rows) {
+		const rowString = row.join(" | ");
+		console.log(rowString);
+	}
 };
-
 
 const getWinnings = (lines: number, rows: string[][], bet: number): number => {
 	let winnings = 0;
