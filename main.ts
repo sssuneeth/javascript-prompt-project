@@ -24,7 +24,8 @@ const SYMBOLS_VALUE: SymbolValue = {
 const deposit = (): number => {
 	let deposit: number;
 	do {
-		deposit = parseFloat(input("Enter a deposit amount: "));
+		const depositInp = input("Enter a deposit amount: ");
+		deposit = +depositInp;
 		if (Number.isNaN(deposit) || deposit <= 0) {
 			console.log(
 				"Please enter a valid positive number for your deposit."
@@ -39,11 +40,8 @@ const getNumberOfLines = (): number => {
 	const MAX_LINES = 3;
 
 	while (true) {
-		const lines = parseFloat(
-			input(
-				`Enter number of lines you want to bet on (${MIN_LINES}-${MAX_LINES}): `
-			)
-		);
+		const linesInp = input( `Enter number of lines you want to bet on (${MIN_LINES}-${MAX_LINES}): `);
+		const lines = +linesInp;
 		if (Number.isNaN(lines) || lines < MIN_LINES || lines > MAX_LINES) {
 			console.log("Invalid number of lines");
 		} else {
@@ -65,11 +63,8 @@ const getBetAmount = (balance: number, lines: number): number => {
 	}
 };
 
-const spin = (): string[][] => {
-	// gets all possible sybmols to array
-	const symbols: string[] = Object.entries(SYMBOLS_COUNT).flatMap(
-		([symbol, count]) => Array(count).fill(symbol)
-	);
+// spin and transpose matrix array
+const spinAndTranspose = (symbols: string[]): string[][] => {
 	/**
 	 * Reels is a nested arrow contains 3 symbols each ( total of 9 )
 	 * @example
@@ -88,11 +83,6 @@ const spin = (): string[][] => {
 		}
 		reels.push(reel);
 	}
-	return reels;
-};
-
-// transpose array by switching its rows with its columns
-const transpose = (reels: string[][]): string[][] => {
 	return reels[0].map((_, i) => reels.map((row) => row[i]));
 };
 
@@ -120,17 +110,20 @@ const getWinnings = (lines: number, rows: string[][], bet: number): number => {
 // game controller
 const playGame = (): void => {
 	let balance = deposit();
-	while (balance > 0) {
+	while (true) {
 		console.log(`You have a balance of $${balance} to bet`);
 		const numberOfLines = getNumberOfLines();
 		const betAmount = getBetAmount(balance, numberOfLines);
 		balance -= betAmount * numberOfLines;
 
-		const reels = spin();
-		const rows = transpose(reels);
-		consoleReels(rows);
+		// gets all possible sybmols to array
+		const symbols: string[] = Object.entries(SYMBOLS_COUNT).flatMap(
+			([symbol, count]) => Array(count).fill(symbol)
+		);
+		const reels = spinAndTranspose(symbols);
+		consoleReels(reels);
 		// determine winning amount
-		const winnings = getWinnings(numberOfLines, rows, betAmount);
+		const winnings = getWinnings(numberOfLines, reels, betAmount);
 		balance += winnings;
 		console.log(`You won $${winnings}`);
 		console.log(`Your balance is $${balance}`);
@@ -139,11 +132,11 @@ const playGame = (): void => {
 			console.log(
 				"You not have enough money to bet, deposit again to continue"
 			);
-			return;
+			break;
 		}
 
 		const playAgain = input("Want to bet again? (y/n) ");
-		if (playAgain !== "y") return;
+		if (playAgain !== "y") break;
 	}
 };
 
