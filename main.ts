@@ -45,7 +45,7 @@ const getNumberOfLines = (): number => {
 	}
 };
 
-const getBet = (balance: number, lines: number): number => {
+const getBetAmount = (balance: number, lines: number): number => {
 	while (true) {
 		const bet = parseFloat(input("Enter a bet amount for per line: "));
 		if (isNaN(bet) || bet * lines > balance) {
@@ -100,18 +100,12 @@ const transpose = (reels: string[][]): string[][] => {
 
 // output reels in a fancy way
 const consoleReels = (rows: string[][]): void => {
-	for (const row of rows) {
-		let rowString = "";
-		for (const [i, sybmol] of row.entries()) {
-			rowString += sybmol;
-
-			if (i !== row.length - 1) {
-				rowString += " | ";
-			}
-		}
-		console.log(rowString);
-	}
+  for (const row of rows) {
+    const rowString = row.join(" | ");
+    console.log(rowString);
+  }
 };
+
 
 const getWinnings = (lines: number, rows: string[][], bet: number): number => {
 	let winnings = 0;
@@ -134,18 +128,19 @@ const getWinnings = (lines: number, rows: string[][], bet: number): number => {
 };
 
 // game controller
-const game = (): void => {
-	let balance: number = deposit();
-	while (true) {
+const playGame = (): void => {
+	let balance = deposit();
+	while (balance > 0) {
 		console.log(`You have a balance of $${balance} to bet`);
-		const lines = getNumberOfLines();
-		const bet = getBet(balance, lines);
-		balance -= bet * lines;
+		const numberOfLines = getNumberOfLines();
+		const betAmount = getBetAmount(balance, numberOfLines);
+		balance -= betAmount * numberOfLines;
 
 		const reels = spin();
 		const rows = transpose(reels);
 		consoleReels(rows);
-		const winnings = getWinnings(lines, rows, bet);
+		// determine winning amount
+		const winnings = getWinnings(numberOfLines, rows, betAmount);
 		balance += winnings;
 		console.log(`You won $${winnings}`);
 		console.log(`Your balance is $${balance}`);
@@ -154,12 +149,12 @@ const game = (): void => {
 			console.log(
 				"You not have enough money to bet, deposit again to continue"
 			);
-			break;
+			return;
 		}
 
 		const playAgain = input("Want to bet again? (y/n) ");
-		if (playAgain !== "y") break;
+		if (playAgain !== "y") return;
 	}
 };
 
-game();
+playGame();
