@@ -108,17 +108,10 @@ const getWinnings = (lines: number, rows: string[][], bet: number): number => {
 	let winnings = 0;
 	for (let row = 0; row < lines; row++) {
 		const symbols = rows[row];
-		let allSame = true;
+		const firstSymbol = symbols[0];
 
-		for (const symbol of symbols) {
-			if (symbol !== symbols[0]) {
-				allSame = false;
-				break;
-			}
-		}
-
-		if (allSame) {
-			winnings += bet * SYMBOLS_VALUE[symbols[0]];
+		if (symbols.every((sybmol) => sybmol === firstSymbol)) {
+			winnings += SYMBOLS_VALUE[firstSymbol];
 		}
 	}
 	return winnings;
