@@ -22,14 +22,14 @@ const SYMBOLS_VALUE: SymbolValue = {
 };
 
 const deposit = (): number => {
-	while (true) {
-		const depositAmount = parseFloat(input("Enter a deposit amount: "));
-		if (isNaN(depositAmount) || depositAmount <= 0) {
-			console.log("Invalid deposit ammount");
-		} else {
-			return depositAmount;
+	let deposit: number;
+	do {
+		deposit = parseFloat(input("Enter a deposit amount: "));
+		if (Number.isNaN(deposit) || deposit <= 0) {
+			console.log("Please enter a valid positive number for your deposit.");
 		}
-	}
+	} while (Number.isNaN(deposit) || deposit <= 0)
+	return deposit;
 };
 
 const getNumberOfLines = (): number => {
