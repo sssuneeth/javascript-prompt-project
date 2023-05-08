@@ -24,7 +24,6 @@ const SYMBOLS_VALUE: SymbolValue = {
 const deposit = (): number => {
 	while (true) {
 		const depositAmount = parseFloat(input("Enter a deposit amount: "));
-
 		if (isNaN(depositAmount) || depositAmount <= 0) {
 			console.log("Invalid deposit ammount");
 		} else {
@@ -38,7 +37,6 @@ const getNumberOfLines = (): number => {
 		const lines = parseFloat(
 			input("Enter number of lines you want to bet on (1-3): ")
 		);
-
 		if (isNaN(lines) || lines <= 0 || lines > 3) {
 			console.log("Invalid number of lines");
 		} else {
@@ -50,7 +48,6 @@ const getNumberOfLines = (): number => {
 const getBet = (balance: number, lines: number): number => {
 	while (true) {
 		const bet = parseFloat(input("Enter a bet amount for per line: "));
-
 		if (isNaN(bet) || bet * lines > balance) {
 			console.log("Invalid bet amount");
 		} else {
@@ -83,8 +80,6 @@ const spin = (): string[][] => {
 
 const transpose = (reels: string[][]): string[][] => {
 	let rows: string[][] = [];
-	// [[B ,C, C], [], []]
-
 	for (let i = 0; i < ROWS; i++) {
 		rows.push([]);
 		for (let j = 0; j < COLS; j++) {
@@ -94,10 +89,9 @@ const transpose = (reels: string[][]): string[][] => {
 	return rows;
 };
 
-const printReels = (rows: string[][]): void => {
+const consoleReels = (rows: string[][]): void => {
 	for (const row of rows) {
 		let rowString = "";
-
 		for (const [i, sybmol] of row.entries()) {
 			rowString += sybmol;
 
@@ -111,7 +105,6 @@ const printReels = (rows: string[][]): void => {
 
 const getWinnings = (lines: number, rows: string[][], bet: number): number => {
 	let winnings = 0;
-
 	for (let row = 0; row < lines; row++) {
 		const symbols = rows[row];
 		let allSame = true;
@@ -132,7 +125,6 @@ const getWinnings = (lines: number, rows: string[][], bet: number): number => {
 
 const game = (): void => {
 	let balance: number = deposit();
-
 	while (true) {
 		console.log(`You have a balance of $${balance} to bet`);
 		const lines = getNumberOfLines();
@@ -141,7 +133,7 @@ const game = (): void => {
 
 		const reels = spin();
 		const rows = transpose(reels);
-		printReels(rows);
+		consoleReels(rows);
 		const winnings = getWinnings(lines, rows, bet);
 		balance += winnings;
 		console.log(`You won $${winnings}`);
