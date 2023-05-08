@@ -71,6 +71,7 @@ const spin = () => {
 			const selectedIndex = Math.floor(Math.random() * reelSymbols.length);
 			const selectedSymbol = reelSymbols[selectedIndex];
 			reels[i].push(selectedSymbol);
+			reelSymbols.splice(selectedIndex, 1);
 		}
 	}
 	console.log(reels);
