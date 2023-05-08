@@ -80,8 +80,22 @@ const spin = () => {
 	return reels;
 };
 
+const transposeReels = (reels) => {
+	const row = [];
+
+	for (let i = 0; i < ROWS; i++) {
+		row.push([]);
+		for (let j = 0; j < COLS; j++) {
+			row[i].push(reels[j][i]);
+		}
+	}
+	console.log(reels);
+	console.log(row);
+};
+
 const reels = spin();
-console.log(reels);
+transposeReels(reels);
+// console.log(reels);
 
 // const balance = deposit();
 // const numberOfLines = getNumberOfLines();
