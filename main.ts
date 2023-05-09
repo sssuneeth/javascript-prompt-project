@@ -1,20 +1,16 @@
 const input = require("prompt-sync")();
 
-interface SymbolValue {
-	[key: string]: number;
-}
-
 const ROWS = 3;
 const COLS = 3;
 
-const SYMBOLS_COUNT: SymbolValue = {
+const SYMBOLS_COUNT: { [key: string]: number } = {
 	A: 4,
 	B: 6,
 	C: 8,
 	D: 10,
 };
 
-const SYMBOLS_VALUE: SymbolValue = {
+const SYMBOLS_VALUE: { [key: string]: number } = {
 	A: 5,
 	B: 4,
 	C: 3,
@@ -99,7 +95,7 @@ const getWinnings = (lines: number, rows: string[][], bet: number): number => {
 		const firstSymbol = symbols[0];
 
 		if (symbols.every((sybmol) => sybmol === firstSymbol)) {
-			winnings += SYMBOLS_VALUE[firstSymbol];
+			winnings += bet * SYMBOLS_VALUE[firstSymbol];
 		}
 	}
 	return winnings;
